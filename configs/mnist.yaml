@@ -1,0 +1,22 @@
+# configs/mnist.yaml
+
+dataset:
+  name: "mnist"
+  image_size: 28
+  batch_size: 128
+  num_workers: 4
+  root: "./data"
+
+model:
+  in_channels: 1
+  base_channels: 64
+  time_emb_dim: 256
+
+degradation:
+  time_steps: 100
+
+training:
+  epochs: 50
+  learning_rate: 0.0002
+  output_dir: "outputs"
+  save_name: "cold_diffusion_blur.pt"
