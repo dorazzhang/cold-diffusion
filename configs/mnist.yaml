@@ -13,7 +13,7 @@ model:
   time_emb_dim: 256
 
 degradation:
-  time_steps: 100
+  timesteps: 100
 
 training:
   epochs: 50

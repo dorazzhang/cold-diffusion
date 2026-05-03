@@ -3,10 +3,10 @@ import torch
 import torch.nn.functional as F
 
 class PixelateDegradation(BaseDegradation):
-    def __init__(self, image_size, channels=3, time_steps=20, resolution_routine='Incremental'):
+    def __init__(self, image_size, channels=3, timesteps=20, resolution_routine='Incremental'):
         self.image_size = image_size
         self.channels = channels
-        self.num_timesteps = int(time_steps)
+        self.num_timesteps = int(timesteps)
         self.resolution_routine = resolution_routine
 
         self.func = self.get_funcs()

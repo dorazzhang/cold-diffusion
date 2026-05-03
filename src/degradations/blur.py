@@ -5,10 +5,10 @@ from torch import nn
 import torchgeometry as tgm
 
 class BlurDegradation(BaseDegradation):
-    def __init__(self, image_size, channels=3, time_steps=20, blur_size=10, blur_std=0.1, blur_routine='Constant'):
+    def __init__(self, image_size, channels=3, timesteps=20, blur_size=10, blur_std=0.1, blur_routine='Constant'):
         self.image_size = image_size
         self.channels = channels
-        self.num_timesteps = int(time_steps)
+        self.num_timesteps = int(timesteps)
         self.blur_size = blur_size
         self.blur_std = blur_std
         self.blur_routine = blur_routine

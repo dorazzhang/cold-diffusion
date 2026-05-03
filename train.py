@@ -25,9 +25,8 @@ def train(config):
     
     optimizer = AdamW(model.parameters(), lr=config['training']['learning_rate'])
     
-    total_timesteps = config['degradation']['total_timesteps']
     degradation = Degradation(
-        timesteps=config['degradation']['time_steps'], 
+        timesteps=config['degradation']['timesteps'], 
         device=device
     )
 
@@ -58,7 +57,7 @@ def train(config):
             optimizer.zero_grad()
 
             # Sample random timestamps
-            t = torch.randint(1, total_timesteps, (current_batch_size,), device=device)
+            t = torch.randint(1, config['degradation']['timesteps'], (current_batch_size,), device=device)
 
             # Apply degradation
             x_t = degradation(batch_x0, t)
