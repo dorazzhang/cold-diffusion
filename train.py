@@ -26,9 +26,10 @@ def train(config):
     optimizer = AdamW(model.parameters(), lr=config['training']['learning_rate'])
     
     degradation = Degradation(
-        timesteps=config['degradation']['timesteps'], 
-        device=device
-    )
+        image_size=config['dataset']['image_size'],
+        channels=config['model']['in_channels'],
+        timesteps=config['degradation']['timesteps']
+    ).to(device)
 
     # Data pipeline
     dataset_name = config['dataset']['name']

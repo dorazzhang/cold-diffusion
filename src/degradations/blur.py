@@ -4,8 +4,10 @@ import numpy as np
 from torch import nn
 import torchgeometry as tgm
 
-class BlurDegradation(BaseDegradation):
-    def __init__(self, image_size, channels=3, timesteps=20, blur_size=10, blur_std=0.1, blur_routine='Constant'):
+class BlurDegradation(BaseDegradation, nn.Module):
+    def __init__(self, image_size, channels=3, timesteps=20, blur_size=3, blur_std=0.1, blur_routine='Constant'):
+        nn.Module.__init__(self)
+
         self.image_size = image_size
         self.channels = channels
         self.num_timesteps = int(timesteps)
@@ -48,10 +50,20 @@ class BlurDegradation(BaseDegradation):
                 kstd = i/100 + 0.35
                 kernels.append(self.get_conv((ks, ks), (kstd, kstd), mode='reflect'))
         return kernels
-        
+    
     def __call__(self, x0, t):
-        for i in range(t):
+        degraded = torch.zeros_like(x0)
+        batch_size = x0.shape[0]
+        
+        for b in range(batch_size):
+            img = x0[b].unsqueeze(0) 
+            
+            target_step = t[b].item()
+            
             with torch.no_grad():
-                x0 = self.gaussian_kernels[i](x0)
-        degraded = x0
+                for i in range(target_step):
+                    img = self.gaussian_kernels[i](img)
+            
+            degraded[b] = img.squeeze(0)
+            
         return degraded

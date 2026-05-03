@@ -17,7 +17,7 @@ class BaseDegradation(ABC):
 
         Args:
             x0 (torch.Tensor): The original clean image to be degraded.
-            t (torch.Tensor): The timestep at which to return the degraded image.
+            t: The timestep at which to return the degraded image.
 
         Returns:
             torch.Tensor: The degraded image at timestep t.
