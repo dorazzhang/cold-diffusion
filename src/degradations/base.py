@@ -12,14 +12,15 @@ class BaseDegradation(ABC):
     @abstractmethod
     def __call__(self, x0, t):
         """
-        Apply the degradation to the clean input image. Returns degraded images at each timestep from 0 to t.
+        Apply the degradation to the clean input image for a single timestep.
+        Returns the degraded image at timestep t.
 
         Args:
             x0 (torch.Tensor): The original clean image to be degraded.
-            t (torch.Tensor): The final time step to degrade the input image to.
+            t (torch.Tensor): The timestep at which to return the degraded image.
 
         Returns:
-            torch.Tensor: The degraded images at each timestep.
+            torch.Tensor: The degraded image at timestep t.
         """
         pass
         
