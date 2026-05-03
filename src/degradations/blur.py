@@ -5,7 +5,7 @@ from torch import nn
 import torchgeometry as tgm
 
 class BlurDegradation(BaseDegradation, nn.Module):
-    def __init__(self, image_size, channels=3, timesteps=20, blur_size=3, blur_std=0.1, blur_routine='Constant'):
+    def __init__(self, image_size, channels=3, timesteps=20, blur_size=11, blur_std=7.0, blur_routine='Constant'):
         nn.Module.__init__(self)
 
         self.image_size = image_size
