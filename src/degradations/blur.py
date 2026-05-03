@@ -49,7 +49,6 @@ class BlurDegradation(BaseDegradation):
                 kernels.append(self.get_conv((ks, ks), (kstd, kstd), mode='reflect'))
         return kernels
         
-
     def __call__(self, x0, t):
         for i in range(t):
             with torch.no_grad():
