@@ -3,4 +3,5 @@ PyYAML
 torch
 torchvision
 torchgeometry
+torchmetrics
 tqdm

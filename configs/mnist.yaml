@@ -3,7 +3,7 @@
 dataset:
   name: "mnist"
   image_size: 28
-  batch_size: 64
+  batch_size: 32
   num_workers: 4
   root: "./data"
 
@@ -16,7 +16,7 @@ degradation:
   timesteps: 20
 
 training:
-  epochs: 5
-  learning_rate: 0.0002
+  epochs: 200
+  learning_rate: 0.00002
   output_dir: "outputs"
   save_name: "cold_diffusion_blur.pt"

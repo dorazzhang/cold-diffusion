@@ -64,7 +64,7 @@ def generate(config):
 
     # Run Algorithm 2
     print("Running Algorithm 2 Reverse Loop...")
-    generated_images, xt_hist, x0_hat_hist = sampler.sample(x_T, timesteps, save_every=10)
+    generated_images, xt_hist, x0_hat_hist = sampler.sample(x_T, timesteps, save_every=1)
 
     # Post-processing and saving
     os.makedirs("samples/xt_progression", exist_ok=True)

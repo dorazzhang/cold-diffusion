@@ -1,6 +1,7 @@
 import torch
 import torch.nn.functional as F
 from torch.optim import AdamW
+from torchmetrics.image import StructuralSimilarityIndexMeasure
 from tqdm import tqdm
 import os
 import yaml
@@ -31,6 +32,8 @@ def train(config):
         timesteps=config['degradation']['timesteps']
     ).to(device)
 
+    ssim_metric = StructuralSimilarityIndexMeasure(data_range=2.0).to(device)
+
     # Data pipeline
     dataset_name = config['dataset']['name']
     print(f"Loading {dataset_name.upper()} dataset...")
@@ -48,7 +51,9 @@ def train(config):
     
     model.train()
     for epoch in range(epochs):
-        epoch_loss = 0.0
+        epoch_l1_loss = 0.0
+        epoch_rmse = 0.0
+        epoch_ssim = 0.0
         progress_bar = tqdm(dataloader, desc=f"Epoch {epoch+1}/{epochs}")
         
         for batch_x0, _ in progress_bar:
@@ -73,11 +78,27 @@ def train(config):
             loss.backward()
             optimizer.step()
 
-            epoch_loss += loss.item()
-            progress_bar.set_postfix({"Loss": f"{loss.item():.4f}"})
+            with torch.no_grad():
+                rmse = torch.sqrt(F.mse_loss(predicted_x0, batch_x0))
+                ssim = ssim_metric(predicted_x0, batch_x0)
+
+            epoch_l1_loss += loss.item()
+            epoch_rmse += rmse.item()
+            epoch_ssim += ssim.item()
+            
+            # Update the progress bar with all three metrics
+            progress_bar.set_postfix({
+                "L1": f"{loss.item():.4f}", 
+                "RMSE": f"{rmse.item():.4f}", 
+                "SSIM": f"{ssim.item():.4f}"
+            })
         
-        avg_epoch_loss = epoch_loss / len(dataloader)
-        print(f"Epoch {epoch+1} Completed | Average Loss: {avg_epoch_loss:.4f}\n")
+        # Calculate averages for the entire epoch
+        avg_l1 = epoch_l1_loss / len(dataloader)
+        avg_rmse = epoch_rmse / len(dataloader)
+        avg_ssim = epoch_ssim / len(dataloader)
+        
+        print(f"Epoch {epoch+1} Completed | L1 Loss: {avg_l1:.4f} | RMSE: {avg_rmse:.4f} | SSIM: {avg_ssim:.4f}\n")
 
     # Save trained model weights
     save_path = os.path.join(config['training']['output_dir'], config['training']['save_name'])

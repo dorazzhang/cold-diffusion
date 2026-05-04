@@ -11,7 +11,7 @@ class Sampler:
         self.device = device
 
     @torch.no_grad()
-    def sample(self, x_T, t, save_every=10):
+    def sample(self, x_T, t, save_every=5):
         self.model.eval()
         x_t = x_T.to(self.device)
         batch_size = x_t.shape[0]
