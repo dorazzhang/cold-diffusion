@@ -3,7 +3,7 @@
 dataset:
   name: "cifar10"
   image_size: 32
-  batch_size: 128
+  batch_size: 32
   num_workers: 4
   root: "./data"
 
@@ -13,10 +13,10 @@ model:
   time_emb_dim: 256
 
 degradation:
-  timesteps: 100
+  timesteps: 50
 
 training:
-  epochs: 50
+  epochs: 450
   learning_rate: 0.0002
   output_dir: "outputs"
   save_name: "cold_diffusion_blur.pt"

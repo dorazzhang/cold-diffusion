@@ -100,6 +100,23 @@ def train(config):
         
         print(f"Epoch {epoch+1} Completed | L1 Loss: {avg_l1:.4f} | RMSE: {avg_rmse:.4f} | SSIM: {avg_ssim:.4f}\n")
 
+        # Save checkpoint every 10 epochs
+        if (epoch + 1) % 10 == 0:
+            checkpoint_path = os.path.join(
+                config["training"]["output_dir"],
+                f"checkpoint_epoch_{epoch+1}.pt"
+            )
+
+            torch.save({
+                "epoch": epoch + 1,
+                "model_state_dict": model.state_dict(),
+                "optimizer_state_dict": optimizer.state_dict(),
+                "loss": avg_l1,
+                "config": config,
+            }, checkpoint_path)
+
+            print(f"Checkpoint saved to {checkpoint_path}")
+
     # Save trained model weights
     save_path = os.path.join(config['training']['output_dir'], config['training']['save_name'])
     torch.save(model.state_dict(), save_path)
