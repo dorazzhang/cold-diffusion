@@ -5,7 +5,8 @@ import argparse
 import os
 
 from src.unet import UNet
-from src.sampler import Sampler
+from src.sampler import Sampler # Algorithm 2
+# from src.adafusion import Sampler # Adafusion Algorithm
 from src.dataset import get_dataloader  # Added to load real images
 
 def generate(config):
