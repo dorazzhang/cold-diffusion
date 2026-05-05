@@ -12,6 +12,7 @@ class Sampler:
 
     @torch.no_grad()
     def sample(self, x_T, t, save_every=5):
+        print("Sampling with Algorithm 2")
         self.model.eval()
         x_t = x_T.to(self.device)
         batch_size = x_t.shape[0]
