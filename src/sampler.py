@@ -32,12 +32,14 @@ class Sampler:
 
             if s == 1:
                 x_t = x0_hat
-                break
-            D_x0_t = self.degradation(x0_hat, t_batch)
+            else:
+              # Forward degradations
+              D_x0_t = self.degradation(x0_hat, t_batch)
 
-            t_minus_1_batch = torch.full((batch_size,), s-1, device=self.device, dtype=torch.long)
-            D_x0_t_minus_1 = self.degradation(x0_hat, t_minus_1_batch)
+              t_minus_1_batch = torch.full((batch_size,), s-1, device=self.device, dtype=torch.long)
+              D_x0_t_minus_1 = self.degradation(x0_hat, t_minus_1_batch)
 
-            x_t = x_t - D_x0_t + D_x0_t_minus_1
+              # Update rule
+              x_t = x_t - D_x0_t + D_x0_t_minus_1
  
         return x_t, x_t_history, x0_hat_history
