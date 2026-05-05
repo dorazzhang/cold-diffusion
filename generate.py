@@ -44,7 +44,14 @@ def generate(config):
         image_size=config['dataset']['image_size'],
         channels=config['model']['in_channels'],
         timesteps=timesteps,
-        resolution_routine='Incremental_factor_2'
+        # blur - mnist
+        # blur_size=11,
+        # blur_std=7.0,
+        # blur_routine='Constant',
+        # blur - cifar10
+        # blur_routine='Special_6_routine',
+        # pixelate - mnist, cifar10
+        # resolution_routine='Incremental_factor_2',
     ).to(device)
 
     # Initialize sampler
