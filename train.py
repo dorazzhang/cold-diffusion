@@ -10,7 +10,7 @@ import argparse
 from src.unet import UNet
 from src.dataset import get_dataloader
 
-def train(config):
+def train(config, resume_path=False):
     # Device configuration
     device = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
     print(f"Initializing training on {device}...")
@@ -26,10 +26,35 @@ def train(config):
     
     optimizer = AdamW(model.parameters(), lr=config['training']['learning_rate'])
     
+    start_epoch = 0
+    if resume_path is not None:
+        if os.path.exists(resume_path):
+            print(f"Resuming training from checkpoint: {resume_path}")
+            # Load the bundle (weights_only=False because it contains epoch ints and optimizer tensors)
+            checkpoint = torch.load(resume_path, map_location=device, weights_only=False)
+            
+            # Restore model and optimizer states
+            model.load_state_dict(checkpoint["model_state_dict"])
+            optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
+            
+            # Restore the epoch counter
+            start_epoch = checkpoint["epoch"]
+            print(f"Successfully resumed at epoch {start_epoch}")
+        else:
+            raise FileNotFoundError(f"Cannot find checkpoint at {resume_path}")
+
     degradation = Degradation(
         image_size=config['dataset']['image_size'],
         channels=config['model']['in_channels'],
-        timesteps=config['degradation']['timesteps']
+        timesteps=config['degradation']['timesteps'],
+        # blur - mnist
+        # blur_size=11,
+        # blur_std=7.0,
+        # blur_routine='Constant',
+        # blur - cifar10
+        # blur_routine='Special_6_routine',
+        # pixelate - mnist, cifar10
+        # resolution_routine='Incremental_factor_2',
     ).to(device)
 
     ssim_metric = StructuralSimilarityIndexMeasure(data_range=2.0).to(device)
@@ -50,7 +75,7 @@ def train(config):
     epochs = config['training']['epochs']
     
     model.train()
-    for epoch in range(epochs):
+    for epoch in range(start_epoch, epochs):
         epoch_l1_loss = 0.0
         epoch_rmse = 0.0
         epoch_ssim = 0.0
@@ -63,7 +88,7 @@ def train(config):
             optimizer.zero_grad()
 
             # Sample random timestamps
-            t = torch.randint(1, config['degradation']['timesteps'], (current_batch_size,), device=device)
+            t = torch.randint(1, config['degradation']['timesteps'] + 1, (current_batch_size,), device=device)
 
             # Apply degradation
             x_t = degradation(batch_x0, t)

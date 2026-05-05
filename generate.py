@@ -21,11 +21,20 @@ def generate(config):
     
     # Load trained weights
     weights_path = os.path.join(config['training']['output_dir'], config['training']['save_name'])
-    
+    # weights_path = 'outputs/mnist/pixelate/checkpoint_epoch_300.pt'
+
     if not os.path.exists(weights_path):
         raise FileNotFoundError(f"Cannot find weights at {weights_path}. Did you run train.py first?")
         
-    model.load_state_dict(torch.load(weights_path, map_location=device, weights_only=True))
+    # Load the file (set weights_only=False because checkpoints contain ints/floats like epoch and loss)
+    checkpoint = torch.load(weights_path, map_location=device, weights_only=False)
+    
+    # Check if it's a bundled checkpoint or just raw weights
+    if "model_state_dict" in checkpoint:
+        model.load_state_dict(checkpoint["model_state_dict"])
+    else:
+        model.load_state_dict(checkpoint)
+        
     print(f"Loaded weights from {weights_path}")
 
     # Initialize degradation
@@ -33,7 +42,8 @@ def generate(config):
     degradation = Degradation(
         image_size=config['dataset']['image_size'],
         channels=config['model']['in_channels'],
-        timesteps=timesteps
+        timesteps=timesteps,
+        resolution_routine='Incremental_factor_2'
     ).to(device)
 
     # Initialize sampler

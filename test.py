@@ -38,26 +38,34 @@ def test(config, weights_path):
     degradation = Degradation(
         image_size=config['dataset']['image_size'],
         channels=config['model']['in_channels'],
-        timesteps=config['degradation']['timesteps']
+        timesteps=config['degradation']['timesteps'],
+        # blur - mnist
+        # blur_size=11,
+        # blur_std=7.0,
+        # blur_routine='Constant',
+        # blur - cifar10
+        # blur_routine='Special_6_routine',
+        # pixelate - mnist, cifar10
+        # resolution_routine='Incremental_factor_2',
     ).to(device)
 
     # Initialize Metrics
     ssim_metric = StructuralSimilarityIndexMeasure(data_range=2.0).to(device)
 
-    # Data pipeline: CRITICAL - train=False loads the unseen test split
+    # Data pipeline
     dataset_name = config['dataset']['name']
     print(f"Loading {dataset_name.upper()} TEST dataset...")
     dataloader = get_dataloader(
         dataset_name=dataset_name,
         root=config['dataset']['root'],
-        train=False, 
+        train=False, # Loads test set
         image_size=config['dataset']['image_size'],
         batch_size=config['dataset']['batch_size'],
         num_workers=config['dataset']['num_workers']
     )
 
     # Testing loop
-    model.eval() # Disable dropout and batch norm tracking
+    model.eval()
     
     total_l1_loss = 0.0
     total_rmse = 0.0
@@ -72,7 +80,7 @@ def test(config, weights_path):
             current_batch_size = batch_x0.shape[0]
 
             # Sample random timestamps for the test batch
-            t = torch.randint(1, config['degradation']['timesteps'], (current_batch_size,), device=device)
+            t = torch.randint(1, config['degradation']['timesteps'] + 1, (current_batch_size,), device=device)
 
             # Apply degradation
             x_t = degradation(batch_x0, t)
