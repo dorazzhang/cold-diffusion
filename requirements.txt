@@ -1,7 +1,0 @@
-numpy < 2.0.0
-PyYAML
-torch
-torchvision
-torchgeometry
-torchmetrics
-tqdm
