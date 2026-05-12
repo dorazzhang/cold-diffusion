@@ -1,6 +1,7 @@
-# Ignore the data folder anywhere in the project
+# Ignore folders generated from running the pipeline
 data/
 outputs/
+samples/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
