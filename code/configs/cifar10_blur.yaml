@@ -1,10 +1,8 @@
-# configs/blur_cifar10.yaml
-
 dataset:
   name: "cifar10"
   image_size: 32
   batch_size: 32
-  num_workers: 4
+  num_workers: 2
   root: "./data"
 
 model:
@@ -13,10 +11,13 @@ model:
   time_emb_dim: 256
 
 degradation:
+  type: "blur"
   timesteps: 50
+  kwargs:
+    blur_routine: 'Special_6_routine'
 
 training:
   epochs: 450
-  learning_rate: 0.0002
-  output_dir: "outputs"
-  save_name: "cold_diffusion_blur.pt"
+  learning_rate: 0.00002
+  output_dir: "outputs/cifar10/blur"
+  save_name: "cifar10_blur.pt"

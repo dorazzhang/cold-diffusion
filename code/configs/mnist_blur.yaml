@@ -1,0 +1,25 @@
+dataset:
+  name: "mnist"
+  image_size: 28
+  batch_size: 32
+  num_workers: 2
+  root: "./data"
+
+model:
+  in_channels: 1
+  base_channels: 64
+  time_emb_dim: 256
+
+degradation:
+  type: "blur"
+  timesteps: 20
+  kwargs:
+    blur_size: 11
+    blur_std: 7.0
+    blur_routine: 'Constant'
+
+training:
+  epochs: 350
+  learning_rate: 0.00002
+  output_dir: "outputs/mnist/blur"
+  save_name: "mnist_blur.pt"

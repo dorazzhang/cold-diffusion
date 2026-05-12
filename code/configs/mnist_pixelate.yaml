@@ -1,10 +1,8 @@
-# configs/mnist.yaml
-
 dataset:
   name: "mnist"
   image_size: 28
   batch_size: 32
-  num_workers: 4
+  num_workers: 2
   root: "./data"
 
 model:
@@ -13,10 +11,13 @@ model:
   time_emb_dim: 256
 
 degradation:
-  timesteps: 20
+  type: "pixelate"
+  timesteps: 3
+  kwargs:
+    resolution_routine: 'Incremental_factor_2'
 
 training:
   epochs: 350
   learning_rate: 0.00002
-  output_dir: "outputs"
-  save_name: "cold_diffusion_blur.pt"
+  output_dir: "outputs/mnist/pixelate"
+  save_name: "mnist_pixelate.pt"

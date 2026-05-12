@@ -1,11 +1,3 @@
-"""
-dataset.py defines the raw dataset-loading pipeline.
-
-This file is responsible for downloading (if necessary), normalizing, and 
-batching the pristine images. It does NOT handle physics or degradation.
-That is handled natively on the GPU in the training loop for maximum throughput.
-"""
-
 import torch
 from pathlib import Path
 from typing import Optional

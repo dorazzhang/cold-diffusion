@@ -1,0 +1,23 @@
+dataset:
+  name: "cifar10"
+  image_size: 32
+  batch_size: 32
+  num_workers: 2
+  root: "./data"
+
+model:
+  in_channels: 3
+  base_channels: 64
+  time_emb_dim: 256
+
+degradation:
+  type: "pixelate"
+  timesteps: 3
+  kwargs:
+    resolution_routine: 'Incremental_factor_2'
+
+training:
+  epochs: 450
+  learning_rate: 0.00002
+  output_dir: "outputs/cifar10/pixelate"
+  save_name: "cifar10_pixelate.pt"
