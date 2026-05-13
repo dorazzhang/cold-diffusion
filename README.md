@@ -50,6 +50,8 @@
 1. Bansal, A., Borgnia, E., Chu, H.-M., Li, J. S., Kazemi, H., Huang, F., Goldblum, M., Geiping, J., & Goldstein, T. (2022). Cold Diffusion: Inverting Arbitrary Image Transforms Without Noise.
 2. Ho, J., Jain, A., & Abbeel, P. (2020). Denoising Diffusion Probabilistic Models. arXiv:2006.11239.
 3. Ronneberger, O., Fischer, P., & Brox, T. (2015). U-Net: Convolutional Networks for Biomedical Image Segmentation. arXiv:1505.04597.
+4. LeCun, Y., Bottou, L., Bengio, Y., & Haffner, P. (1998). Gradient-Based Learning Applied to Document Recognition. Proc. IEEE.
+5. Krizhevsky, A. (2009). Learning Multiple Layers of Features from Tiny Images. Technical Report.
 
 ## Acknowledgements
 We would like to acknowledge and thank Professor Weinberger, Professor Ma, and the teaching staff of the Cornell Spring 2026 CS 4782 course. Through their guidance throughout the semester and during the project, we were able to produce meaningful results and expand our knowledge in research and deep learning implementations.
